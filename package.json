@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/OdayMansour/courses#readme",
   "dependencies": {
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "express-generator": "^4.15.0"
   }
 }
