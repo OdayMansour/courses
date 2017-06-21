@@ -1,0 +1,22 @@
+{
+  "name": "courses",
+  "version": "1.0.0",
+  "description": "Web app for groceries",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OdayMansour/courses.git"
+  },
+  "author": "omansour",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OdayMansour/courses/issues"
+  },
+  "homepage": "https://github.com/OdayMansour/courses#readme",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}
