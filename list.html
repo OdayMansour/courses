@@ -5,50 +5,91 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
     <script type="text/babel">
 
-    var lists = 
-    {
-        "list": [
-            {
-                "key": "1",
-                "title": "Cuisine",
-                "items": ["Farine", "Savon", "Levure Chimique"],
-                "creator": "Oday Mansour"
-            }, 
-            {
-                "key": "2",
-                "title": "Salon",
-                "items": ["Plante", "Cadre", "Mirroir"],
-                "creator": "Oday Mansour"
-            },
-            {
-                "key": "3",
-                "title": "Salle de bain",
-                "items": ["Sopalin", "Serviettes", "Loofah"],
-                "creator": "Oday Mansour"
-            }
-        ]
-    }
 
     class Courses extends React.Component {
-        render() {
-            var one = lists.list[0]
-            var two = lists.list[1]
+        constructor(props) {
+            super(props)
+            this.state = 
+                {
+                    "list": [
+                        {
+                            "key": 0,
+                            "title": "Cuisine",
+                            "items": ["Farine", "Savon", "Levure Chimique"],
+                            "creator": "Oday Mansour"
+                        }, 
+                        {
+                            "key": 1,
+                            "title": "Salon",
+                            "items": ["Plante", "Cadre", "Miroir", "Tableau"],
+                            "creator": "Oday Mansour"
+                        },
+                        {
+                            "key": 2,
+                            "title": "Salle de bain",
+                            "items": ["Sopalin", "Serviettes", "Loofah"],
+                            "creator": "Oday Mansour"
+                        }
+                    ]
+                }
+            this.exposeSate = this.exposeSate.bind(this);
+            this.repaint = this.repaint.bind(this);
+        }
 
-            const dynLists = lists.list.map( itemList => {
-            return (<List data={itemList} key={itemList.key} />)
-            })
+        exposeSate(props) {
+            console.log(this.state)
+            this.setState(this.state)
+        }
+
+        repaint() {
+            this.setState(this.state)
+        }
+
+        render() {
+            const lists = this.state.list.map( list => 
+                {
+                    return (
+                        <List list={list} key={list.key} repaint={this.repaint} />
+                    )
+                }
+            )
             return (
-                <div className="courses">
-                    <div className="lists">
-                        {dynLists}
+                <div className="cssCourses">
+                    <div className="cssLists">
+                        {lists}
                     </div>
-                    <div className="info">
+                    <div className="cssInfo">
                         <Info />
                     </div>
+                    <button onClick={this.exposeSate}>
+                        <b>Refresh and Expose state</b>
+                    </button>
                 </div>
             );
         }
     }
+
+
+    class List extends React.Component {
+        constructor(props) {
+            super(props)
+        }
+
+        render() {
+            const listItems = this.props.list.items.map( n => {
+                return (
+                    <Item name={n} key={n} />
+                );
+            });
+
+            const emptyItem = <AddItem list={this.props.list} repaint={this.props.repaint} />
+  
+            return (
+                <ol><span className="cssTitle">{this.props.list.title} by {this.props.list.creator}</span>{listItems}{emptyItem}</ol>
+            );
+        }
+    }
+
 
     class Item extends React.Component {
         render() {
@@ -58,38 +99,51 @@
         }
     }
 
-    class AddItem extends React.Component {
-        render() {
-            return (
-                <li className="AddItem"><a href="#">Ajouter un objet</a><a href="#"></a></li>
-            );
-        }
-    }
-  
-    class List extends React.Component {
-        render() {
-            var arrayItems = []
-            
-            const listItems = this.props.data.items.map( n => {
-                return (
-                    <Item name={n} key={n} />
-                );
-            });
 
-            const emptyItem = <AddItem />
-  
+    class AddItem extends React.Component {
+        constructor(props) {
+            super(props);
+            this.handleAddItem = this.handleAddItem.bind(this)
+            this.handleChange = this.handleChange.bind(this)
+        }
+
+        handleChange(event) {
+            this.setState({value: event.target.value})
+        }
+
+        handleAddItem(event) {
+            // prevent leaving page
+            event.preventDefault()
+
+            // add to item to list
+            this.props.list.items.push(this.state.value.trim())
+
+            // repaint courses
+            this.props.repaint()
+        }
+
+        render() {
             return (
-                <ol><span className="title">{this.props.data.title} by {this.props.data.creator}</span>{listItems}{emptyItem}</ol>
+                <li className="cssAddItem">
+                    <form onSubmit={this.handleAddItem}>
+                        <label>Name:
+                            <input type="text" name="itemName" defaultValue="New item" onChange={this.handleChange} />
+                        </label>
+                        <input type="submit" value="Submit" />
+                    </form>
+                </li>
             );
         }
     }
   
+
     class Info extends React.Component {
+        
         render () {
             const name = "Oday Mansour"
-            const sent = "Testing list created by " + name
+            const info = "Signed in as: " + name
             return (
-                <span>{sent}</span>
+                <span>{info}</span>
             );
         }
     }
@@ -99,42 +153,42 @@
 
     <style type="text/css">
         
-    body {
-        font-family: "Helvetica";
-    }
+        body {
+            font-family: "Helvetica";
+        }
 
-    a {
-        text-decoration: underline;
-        color: white;
-    }
+        a {
+            text-decoration: underline;
+            color: white;
+        }
 
-    li {
-        background-color: #087D5B;
-        color: white;
-        max-width: 290px;
-        min-height: 40px;
-        border: solid 1px white;
-        vertical-align: middle;
-        line-height: 40px;
-        padding-left: 10px;
-    }
+        li {
+            background-color: #087D5B;
+            color: white;
+            max-width: 290px;
+            min-height: 40px;
+            border: solid 1px white;
+            vertical-align: middle;
+            line-height: 40px;
+            padding-left: 10px;
+        }
 
-    .AddItem {
-        background-color: #6CBDA5;
-    }
+        .cssAddItem {
+            background-color: #6CBDA5;
+        }
 
-    ol {
-        background-color: red;
-        list-style: none;
-        padding: 0;
-        max-width: 310px;
-    }
+        ol {
+            background-color: red;
+            list-style: none;
+            padding: 0;
+            max-width: 310px;
+        }
 
-    .title {
-        color: white;
-        font-size: 1.3em;
-        margin-left: 5px;
-    }
+        .cssTitle {
+            color: white;
+            font-size: 1.3em;
+            margin-left: 5px;
+        }
 
     </style>
   </head>
