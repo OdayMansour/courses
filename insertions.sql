@@ -13,9 +13,10 @@ INSERT INTO users
 (username, firstname, lastname, email, country, password, salt)
 values
 ('melody', 'Melody', 'Allouche', 'melody.allouche@gmail.com', 'FR', '00000000000000000000000000000000', '00000000000000000000000000000000')
+returning id
 -- ('oday', 'Oday', 'Mansour', 'odaym@nsour.net', 'FR', '00000000000000000000000000000000', '00000000000000000000000000000000')
 
--- CREATE TABLE list (
+-- CREATE TABLE lists (
 --     id          serial PRIMARY KEY,
 --     name        varchar(128) NOT NULL,
 --     templateID  integer DEFAULT 0,
@@ -23,19 +24,20 @@ values
 --     shared      boolean DEFAULT FALSE
 -- )
 
--- CREATE TABLE item (
+-- CREATE TABLE items (
 --     id          serial PRIMARY KEY,
 --     name        varchar(256) NOT NULL,
 --     categoryID  integer DEFAULT 0
 -- )
+insert into item (name) values ('Burea') returning id
 
--- CREATE TABLE template (
+-- CREATE TABLE templates (
 --     id          serial PRIMARY KEY,
 --     name        varchar(128) NOT NULL,
 --     listID      integer NOT NULL
 -- )
 
--- CREATE TABLE household (
+-- CREATE TABLE households (
 --     id          serial PRIMARY KEY,
 --     name        varchar(128) NOT NULL
 -- )
@@ -50,7 +52,7 @@ values
 --     itemID      integer NOT NULL
 -- )
 
--- CREATE TABLE category (
+-- CREATE TABLE categories (
 --     id          serial PRIMARY KEY,
 --     name        varchar(120)
 -- )

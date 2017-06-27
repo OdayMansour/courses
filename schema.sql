@@ -19,7 +19,7 @@ CREATE TABLE users (
     salt        char(32) NOT NULL
 );
 
-CREATE TABLE list (
+CREATE TABLE lists (
     id          serial PRIMARY KEY,
     name        varchar(128) NOT NULL,
     templateID  integer DEFAULT 0,
@@ -27,19 +27,19 @@ CREATE TABLE list (
     shared      boolean DEFAULT FALSE
 );
 
-CREATE TABLE item (
+CREATE TABLE items (
     id          serial PRIMARY KEY,
     name        varchar(256) NOT NULL,
     categoryID  integer DEFAULT 0
 );
 
-CREATE TABLE template (
+CREATE TABLE templates (
     id          serial PRIMARY KEY,
     name        varchar(128) NOT NULL,
     listID      integer NOT NULL
 );
 
-CREATE TABLE household (
+CREATE TABLE households (
     id          serial PRIMARY KEY,
     name        varchar(128) NOT NULL
 );
@@ -54,7 +54,7 @@ CREATE TABLE list_item (
     itemID      integer NOT NULL
 );
 
-CREATE TABLE category (
+CREATE TABLE categories (
     id          serial PRIMARY KEY,
     name        varchar(120)
 );
