@@ -34,46 +34,95 @@ function nothing(req, res) {
 
 // User stuff functions
 function allUsers(req, res) {
-  queryAndProcess('SELECT * FROM users where $1', ['TRUE'], justsend, res)
+  queryAndProcess('SELECT * FROM users WHERE $1', ['TRUE'], justsend, res)
 }
 
-function oneUser(req, res) {
-  queryAndProcess('SELECT * FROM users where username = $1', [req.query.username], justsend, res)
+function oneUserFromUsername(req, res, username) {
+  queryAndProcess('SELECT * FROM users WHERE username = $1', [username], justsend, res)
+}
+
+function oneUserFromUserid(req, res, userid) {
+  queryAndProcess('SELECT * FROM users WHERE id = $1', [userid], justsend, res)
+}
+
+function householdUsers(req, res, householdid) {
+  queryAndProcess('SELECT * FROM users WHERE id IN (SELECT userid FROM user_household WHERE householdid = $1)', [householdid], justsend, res)
+}
+
+function listUser(req, res, listid) {
+  queryAndProcess('SELECT * FROM users WHERE id = (SELECT userid FROM lists WHERE id = $1)', [listid], justsend, res)
+}
+
+function getUser(req, res) {
+  console.log("On /list")
+  console.log(JSON.stringify(req.query))
+
+  if (typeof req.query.username != 'undefined') {
+    oneUserFromUsername(req, res, req.query.username)
+  
+  } else if (typeof req.query.userid != 'undefined') {
+    oneUserFromUserid(req, res, req.query.userid)
+  
+  } else if (typeof req.query.householdid != 'undefined') {
+    householdUsers(req, res, req.query.householdid)
+  
+  } else if (typeof req.query.listid != 'undefined') {
+    listUser(req, res, req.query.listid)
+  
+  } else {
+    allUsers(req, res)    
+  }
+
 }
 
 
 
 // List stuff functions
 function allLists(req, res) {
-  queryAndProcess('SELECT * FROM lists where $1', ['TRUE'], justsend, res)
+  queryAndProcess('SELECT * FROM lists WHERE $1', ['TRUE'], justsend, res)
 }
 
-function oneList(req, res) {
-  queryAndProcess('SELECT * FROM lists where id = $1', [req.query.listid], justsend, res)
+function oneList(req, res, listid) {
+  queryAndProcess('SELECT * FROM lists WHERE id = $1', [listid], justsend, res)
 }
 
-function userLists(req, res) {
-  queryAndProcess('SELECT * FROM lists where userid = (select id from users where username = $1)', [req.query.username], justsend, res)
+function userLists(req, res, userid) {
+  queryAndProcess('SELECT * FROM lists WHERE userid = $1', [userid], justsend, res)
 }
 
-function householdLists(req, res) {
-  queryAndProcess('SELECT * FROM lists where userid in (select userid from user_household where householdid = $1)', [req.query.householdid], justsend, res)
+function householdLists(req, res, householdid) {
+  queryAndProcess('SELECT * FROM lists WHERE userid IN (select userid from user_household WHERE householdid = $1)', [householdid], justsend, res)
 }
 
+function getList(req, res) {
+  console.log("On /list")
+  console.log(JSON.stringify(req.query))
 
+  if (typeof req.query.listid != 'undefined') {
+    oneList(req, res, req.query.listid)
+  
+  } else if (typeof req.query.userid != 'undefined') {
+    userLists(req, res, req.query.userid)
+  
+  } else if (typeof req.query.householdid != 'undefined') {
+    householdLists(req, res, req.query.householdid)
+  
+  } else {
+    allLists(req, res)    
+  }
+
+}
 
 app.get('/', nothing)
 
 // User stuff
-app.get('/users', allUsers)
-app.get('/user', oneUser)
+app.get('/user', getUser)
 
 // List stuff
-app.get('/lists', allLists)
-app.get('/list', oneList)
-app.get('/userlists', userLists)
-app.get('/householdlists', householdLists)
+app.get('/list', getList)
 
+// Item stuff
+// app.get('/items', allItems)
 
 
 app.listen(3000, function () {
