@@ -445,8 +445,8 @@ COPY templates (id, name, listid) FROM stdin;
 --
 
 COPY user_household (userid, householdid) FROM stdin;
+2	1
 3	1
-3	2
 \.
 
 
