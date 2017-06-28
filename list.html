@@ -13,19 +13,19 @@
                 {
                     "list": [
                         {
-                            "key": 0,
+                            "id": 0,
                             "title": "Cuisine",
                             "items": ["Farine", "Savon", "Levure Chimique"],
                             "creator": "Oday Mansour"
                         }, 
                         {
-                            "key": 1,
+                            "id": 1,
                             "title": "Salon",
                             "items": ["Plante", "Cadre", "Miroir", "Tableau"],
                             "creator": "Oday Mansour"
                         },
                         {
-                            "key": 2,
+                            "id": 2,
                             "title": "Salle de bain",
                             "items": ["Sopalin", "Serviettes", "Loofah"],
                             "creator": "Oday Mansour"
@@ -49,7 +49,7 @@
             const lists = this.state.list.map( list => 
                 {
                     return (
-                        <List list={list} key={list.key} repaint={this.repaint} />
+                        <List list={list} id={list.id} repaint={this.repaint} />
                     )
                 }
             )
