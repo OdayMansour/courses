@@ -5,41 +5,60 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
     <script type="text/babel">
 
+    var globalState = 
+    {
+        "list": [
+            {
+                "id": 0,
+                "name": "Cuisine",
+                "items": ["Farine", "Savon", "Levure Chimique"],
+            }, 
+            {
+                "id": 1,
+                "name": "Salon",
+                "items": ["Plante", "Cadre", "Miroir", "Tableau"],
+            },
+            {
+                "id": 2,
+                "name": "Salle de bain",
+                "items": ["Sopalin", "Serviettes", "Loofah"],
+            }
+        ]
+    }
+    var repainter
 
     class Courses extends React.Component {
         constructor(props) {
             super(props)
-            this.state = 
-                {
-                    "list": [
-                        {
-                            "id": 0,
-                            "name": "Cuisine",
-                            "items": ["Farine", "Savon", "Levure Chimique"],
-                        }, 
-                        {
-                            "id": 1,
-                            "name": "Salon",
-                            "items": ["Plante", "Cadre", "Miroir", "Tableau"],
-                        },
-                        {
-                            "id": 2,
-                            "name": "Salle de bain",
-                            "items": ["Sopalin", "Serviettes", "Loofah"],
-                        }
-                    ]
-                }
+            this.state = globalState
+                
             this.exposeSate = this.exposeSate.bind(this);
             this.repaint = this.repaint.bind(this);
+            repainter = this.repaint;
         }
 
-        exposeSate(props) {
-            console.log(this.state)
+        exposeSate() {
+            var xhttp = new XMLHttpRequest();
+            var kjh = this.state
+            
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(globalState)
+                    globalState = JSON.parse(this.responseText)
+                    console.log(globalState)
+                    repainter()
+                }
+            };
+
+            xhttp.open("GET", "http://localhost:3000/api/users/3/lists/full", true);
+            xhttp.send();
             this.setState(this.state)
         }
 
         repaint() {
-            this.setState(this.state)
+            console.log("Setting state now to: ")
+            console.log(globalState)
+            this.setState(globalState)
         }
 
         render() {
