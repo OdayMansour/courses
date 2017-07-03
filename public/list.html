@@ -1,0 +1,220 @@
+<HTML>
+  <head>
+    <script src="res/js/react-with-addons.js"></script>
+    <script src="res/js/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script type="text/babel">
+
+    var globalState =
+    {
+        "list": [
+            {
+                "id": 0,
+                "name": "Cuisine",
+                "items": ["Farine", "Savon", "Levure Chimique"],
+            },
+            {
+                "id": 1,
+                "name": "Salon",
+                "items": ["Plante", "Cadre", "Miroir", "Tableau"],
+            },
+            {
+                "id": 2,
+                "name": "Salle de bain",
+                "items": ["Sopalin", "Serviettes", "Loofah"],
+            }
+        ]
+    }
+    var repainter
+
+    class Courses extends React.Component {
+        constructor(props) {
+            super(props)
+            this.state = globalState
+
+            this.exposeSate = this.exposeSate.bind(this);
+            this.repaint = this.repaint.bind(this);
+            repainter = this.repaint;
+        }
+
+        exposeSate() {
+            var xhttp = new XMLHttpRequest();
+            var kjh = this.state
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(globalState)
+                    globalState = JSON.parse(this.responseText)
+                    console.log(globalState)
+                    repainter()
+                }
+            };
+
+            xhttp.open("GET", "http://localhost:3000/api/users/3/lists/full", true);
+            xhttp.send();
+            this.setState(this.state)
+        }
+
+        repaint() {
+            console.log("Setting state now to: ")
+            console.log(globalState)
+            this.setState(globalState)
+        }
+
+        render() {
+            const lists = this.state.list.map( list =>
+                {
+                    return (
+                        <List list={list} id={list.id} repaint={this.repaint} />
+                    )
+                }
+            )
+            return (
+                <div className="cssCourses">
+                    <div className="cssLists">
+                        {lists}
+                    </div>
+                    <div className="cssInfo">
+                        <Info />
+                    </div>
+                    <button onClick={this.exposeSate}>
+                        <b>Refresh and Expose state</b>
+                    </button>
+                </div>
+            );
+        }
+    }
+
+
+    class List extends React.Component {
+        constructor(props) {
+            super(props)
+        }
+
+        render() {
+            const listItems = this.props.list.items.map( n => {
+                return (
+                    <Item name={n} key={n} />
+                );
+            });
+
+            const emptyItem = <AddItem list={this.props.list} repaint={this.props.repaint} />
+
+            return (
+                <ol><span className="cssTitle">{this.props.list.name}</span>{listItems}{emptyItem}</ol>
+            );
+        }
+    }
+
+
+    class Item extends React.Component {
+        render() {
+            return (
+                <li>{this.props.name}</li>
+            );
+        }
+    }
+
+
+    class AddItem extends React.Component {
+        constructor(props) {
+            super(props);
+            this.handleAddItem = this.handleAddItem.bind(this)
+            this.handleChange = this.handleChange.bind(this)
+        }
+
+        handleChange(event) {
+            this.setState({value: event.target.value})
+        }
+
+        handleAddItem(event) {
+            // prevent leaving page
+            event.preventDefault()
+
+            // add to item to list
+            this.props.list.items.push(this.state.value.trim())
+
+            // repaint courses
+            this.props.repaint()
+        }
+
+        render() {
+            return (
+                <li className="cssAddItem">
+                    <form onSubmit={this.handleAddItem}>
+                        <label>Name:
+                            <input type="text" name="itemName" defaultValue="New item" onChange={this.handleChange} />
+                        </label>
+                        <input type="submit" value="Submit" />
+                    </form>
+                </li>
+            );
+        }
+    }
+
+
+    class Info extends React.Component {
+
+        render () {
+            const name = "Oday Mansour"
+            const info = "Signed in as: " + name
+            return (
+                <span>{info}</span>
+            );
+        }
+    }
+
+
+    ReactDOM.render(<Courses />, document.getElementById("root"));
+
+    </script>
+
+    <style type="text/css">
+
+        body {
+            font-family: "Helvetica";
+        }
+
+        a {
+            text-decoration: underline;
+            color: white;
+        }
+
+        li {
+            background-color: #087D5B;
+            color: white;
+            max-width: 290px;
+            min-height: 40px;
+            border: solid 1px white;
+            vertical-align: middle;
+            line-height: 40px;
+            padding-left: 10px;
+        }
+
+        .cssAddItem {
+            background-color: #6CBDA5;
+        }
+
+        ol {
+            background-color: red;
+            list-style: none;
+            padding: 0;
+            max-width: 310px;
+        }
+
+        .cssTitle {
+            color: white;
+            font-size: 1.3em;
+            margin-left: 5px;
+        }
+
+    </style>
+  </head>
+  <body>
+
+    <div id="root"></div>
+
+    <div id="errors" style="background: #c00;color: #fff;display: none;margin: -20px -20px 20px;padding: 20px;white-space: pre-wrap;"></div>
+
+</body>
+</HTML>
