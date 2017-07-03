@@ -5,16 +5,15 @@
 --     lastname    varchar(128) NOT NULL,
 --     email       varchar(256) NOT NULL,
 --     country     char(2) NOT NULL,
---     password    char(32) NOT NULL,
---     salt        char(32) NOT NULL
+--     password    char(32) NOT NULL
 -- )
 
 INSERT INTO users
-(username, firstname, lastname, email, country, password, salt)
+(username, firstname, lastname, email, country, password)
 values
-('melody', 'Melody', 'Allouche', 'melody.allouche@gmail.com', 'FR', '00000000000000000000000000000000', '00000000000000000000000000000000')
+('melody', 'Melody', 'Allouche', 'melody.allouche@gmail.com', 'FR', '$2a$10$APiayfHPkzF/1JGfvPRnTurCPy43dBH6XpompLV2/gKCTN.hsVgNS')
 returning id
--- ('oday', 'Oday', 'Mansour', 'odaym@nsour.net', 'FR', '00000000000000000000000000000000', '00000000000000000000000000000000')
+-- ('oday', 'Oday', 'Mansour', 'odaym@nsour.net', 'FR', '$2a$10$F2jwQC4iY.mhU538Zc5Pq.Un6AqYp0H1AZ.kRi/zFiFSeTcYJnLGa')
 
 -- CREATE TABLE lists (
 --     id          serial PRIMARY KEY,

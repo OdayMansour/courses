@@ -15,8 +15,7 @@ CREATE TABLE users (
     lastname    varchar(128) NOT NULL,
     email       varchar(256) NOT NULL,
     country     char(2) NOT NULL,
-    password    char(32) NOT NULL,
-    salt        char(32) NOT NULL
+    password    char(60) NOT NULL
 );
 
 CREATE TABLE lists (
