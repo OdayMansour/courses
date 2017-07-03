@@ -1,7 +1,7 @@
 // Not mine
 const express = require('express')
-const app = express()
 const bodyParser = require('body-parser');
+const app = express()
 
 // Mine
 const pool = require('./lib/db')
@@ -18,33 +18,8 @@ app.use(express.static('public'))
 
 // Paths
 app.get('/', nothing)
-app.get('/createuser', function (req, res) {
-  res.send(
-`<html>
-  <body>
-    <form action="/createuser/" method="post">
-      <label for="username">Username: </label>
-      <input id="username" type="text" name="username" value=""><br />
-      <label for="firstname">First name: </label>
-      <input id="firstname" type="text" name="firstname" value=""><br />
-      <label for="lastname">Last name: </label>
-      <input id="lastname" type="text" name="lastname" value=""><br />
-      <label for="email">E-mail: </label>
-      <input id="email" type="text" name="email" value=""><br />
-      <label for="country">Country: </label>
-      <input id="country" type="text" name="country" value=""><br />
-      <label for="password">Password: </label>
-      <input id="password" type="text" name="password" value=""><br />
-      <input type="submit" value="OK">
-    </form>
-  </body>
-</html>`
-)
-
-})
-app.post('/createuser', function (req, res) {
-  res.send(JSON.stringify(req.body, null, 2))
-})
+app.get('/createuser', users.createUser_get)
+app.post('/createuser', users.createUser_post)
 
 // Routers
 var routerUsers = express.Router()
@@ -53,10 +28,10 @@ var routerItems = express.Router()
 var routerHouseholds = express.Router()
 
 // Assigning routers
-app.use('/users', routerUsers)
-app.use('/lists', routerLists)
-app.use('/items', routerItems)
-app.use('/households', routerHouseholds)
+app.use('/api/users', routerUsers)
+app.use('/api/lists', routerLists)
+app.use('/api/items', routerItems)
+app.use('/api/households', routerHouseholds)
 
 // Users stuff
 routerUsers.get('/:userid', users.userFromUserid)
