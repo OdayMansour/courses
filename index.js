@@ -45,6 +45,8 @@ routerUsers.get('/:userid/lists/full', users.fullListsFromUserid)
 routerUsers.get('/:userid/households', users.householdsFromUserid)
 
 // Lists stuff
+routerLists.get('/create', lists.create_get)
+routerLists.post('/create', lists.create_post)
 routerLists.get('/additem', lists.addItem_get)
 routerLists.post('/additem', lists.addItem_post)
 routerLists.get('/:listid', lists.listFromListid)
