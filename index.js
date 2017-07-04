@@ -18,8 +18,13 @@ app.use(express.static('public'))
 
 // Paths
 app.get('/', nothing)
+
 app.get('/createuser', users.createUser_get)
 app.post('/createuser', users.createUser_post)
+
+app.get('/createhousehold', households.createHousehold_get)
+app.post('/createhousehold', households.createHousehold_post)
+
 
 // Routers
 var routerUsers = express.Router()
