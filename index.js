@@ -54,6 +54,8 @@ routerLists.get('/:listid/full', lists.fullListFromListid)
 routerItems.get('/:itemid', items.itemFromItemid)
 
 // Households stuff
+routerHouseholds.get('/joinhousehold', households.joinHousehold_get)
+routerHouseholds.post('/joinhousehold', households.joinHousehold_post)
 routerHouseholds.get('/:householdid', households.householdFromHouseholdid)
 routerHouseholds.get('/:householdid/users', households.usersFromHouseholdid)
 routerHouseholds.get('/:householdid/lists', households.listsFromHouseholdid)
