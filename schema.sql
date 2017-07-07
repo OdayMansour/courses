@@ -40,7 +40,8 @@ CREATE TABLE templates (
 
 CREATE TABLE households (
     id          serial PRIMARY KEY,
-    name        varchar(128) NOT NULL
+    name        varchar(128) NOT NULL,
+    userID      integer NOT NULL
 );
 
 CREATE TABLE user_household (
