@@ -45,10 +45,14 @@ routerUsers.get('/:userid/lists/full', users.fullListsFromUserid)
 routerUsers.get('/:userid/households', users.householdsFromUserid)
 
 // Lists stuff
+routerLists.get('/delete', lists.delete_get)
+routerLists.post('/delete', lists.delete_post)
 routerLists.get('/create', lists.create_get)
 routerLists.post('/create', lists.create_post)
 routerLists.get('/additem', lists.addItem_get)
 routerLists.post('/additem', lists.addItem_post)
+routerLists.get('/delitem', lists.delItem_get)
+routerLists.post('/delitem', lists.delItem_post)
 routerLists.get('/:listid', lists.listFromListid)
 routerLists.get('/:listid/full', lists.fullListFromListid)
 
@@ -56,6 +60,8 @@ routerLists.get('/:listid/full', lists.fullListFromListid)
 routerItems.get('/:itemid', items.itemFromItemid)
 
 // Households stuff
+routerHouseholds.get('/leave', households.leave_get)
+routerHouseholds.post('/leave', households.leave_post)
 routerHouseholds.get('/join', households.join_get)
 routerHouseholds.post('/join', households.join_post)
 routerHouseholds.get('/:householdid', households.householdFromHouseholdid)
