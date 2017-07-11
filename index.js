@@ -1,7 +1,9 @@
 // Not mine
 const express = require('express')
-const bodyParser = require('body-parser');
-const app = express()
+const session = require('express-session')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const passport = require('passport')
 
 // Mine
 const pool = require('./lib/db')
@@ -12,9 +14,19 @@ const items = require('./lib/items')
 const households = require('./lib/households')
 
 // Configuring Express app
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+const app = express()
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+
+app.use(cookieParser)
+
 app.use(express.static('public'))
+
+app.use(session({ secret: 'ifallinlovetooeasily' }))
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Paths
 app.get('/', nothing)
@@ -24,7 +36,6 @@ app.post('/createuser', users.createUser_post)
 
 app.get('/createhousehold', households.createHousehold_get)
 app.post('/createhousehold', households.createHousehold_post)
-
 
 // Routers
 var routerUsers = express.Router()
