@@ -12,21 +12,20 @@ const users = require('./lib/users')
 const lists = require('./lib/lists')
 const items = require('./lib/items')
 const households = require('./lib/households')
+const sessions = require('./lib/sessions')
+
+const passportConf = require('./config/passport')(passport)
 
 // Configuring Express app
 const app = express()
-
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-
-app.use(cookieParser)
-
+app.use(cookieParser())
 app.use(express.static('public'))
-
 app.use(session({ secret: 'ifallinlovetooeasily' }))
-
 app.use(passport.initialize())
 app.use(passport.session())
+
 
 // Paths
 app.get('/', nothing)
@@ -36,6 +35,10 @@ app.post('/createuser', users.createUser_post)
 
 app.get('/createhousehold', households.createHousehold_get)
 app.post('/createhousehold', households.createHousehold_post)
+
+app.post('/login', sessions.login_post(passport))
+app.get('/login', sessions.login_get)
+
 
 // Routers
 var routerUsers = express.Router()
@@ -50,6 +53,7 @@ app.use('/api/items', routerItems)
 app.use('/api/households', routerHouseholds)
 
 // Users stuff
+routerUsers.get('/', users.userRoot)
 routerUsers.get('/:userid', users.userFromUserid)
 routerUsers.get('/:userid/lists', users.listsFromUserid)
 routerUsers.get('/:userid/lists/full', users.fullListsFromUserid)
@@ -83,9 +87,9 @@ routerHouseholds.get('/:householdid/lists/full', households.fullListsFromHouseho
 
 // Generic stuff
 function nothing(req, res) {
-  res.send("Nothing to see here.")
+    res.send("Nothing to see here.")
 }
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
+    console.log('Example app listening on port 3000!')
 })
